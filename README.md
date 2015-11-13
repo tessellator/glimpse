@@ -1,4 +1,4 @@
-# Glimpse
+# Glimpse [![Build Status](https://travis-ci.org/tessellator/glimpse.svg?branch=master)](https://travis-ci.org/tessellator/glimpse)
 
 ```
 When I was a child
