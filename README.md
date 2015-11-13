@@ -10,8 +10,6 @@ I cannot put my finger on it now
 The child is grown,
 The dream is gone.
 
-I have become comfortably numb.
-
 
 — Pink Floyd, "Comfortably Numb"
 ```
