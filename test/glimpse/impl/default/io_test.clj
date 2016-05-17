@@ -26,7 +26,9 @@
   (with-redefs [io/resource check-path]
     (testing "with an implicit index"
       (is (= (page-resource "views" "/") "views/index.html"))
-      (is (= (page-resource "views" "/admin/") "views/admin/index.html")))
+      (are [page] (= page "views/admin/index.html")
+        (page-resource "views" "/admin/")
+        (page-resource "views" "/admin")))
 
     (testing "with an explicit lookup name"
       (is (= (page-resource "views" "/post") "views/post.html")))

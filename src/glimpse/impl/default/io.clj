@@ -13,7 +13,8 @@
   "Gets the HTML page resource for a given uri.
 
   If the uri ends with a '/', a file named 'index.html' is assumed to be the
-  intended resource."
+  intended resource. If a file is not found based on the name, a folder
+  matching the name is searched for index.html."
   ([root uri]
    (if (.endsWith uri "/")
      (page-resource root uri "index")
@@ -21,7 +22,8 @@
        (page-resource root (.getParent f) (.getName f)))))
 
   ([root uri name]
-   (io/resource (get-path root uri (str name ".html")))))
+   (or (io/resource (get-path root uri (str name ".html")))
+       (io/resource (get-path root uri (str name "/index.html"))))))
 
 (defn template-resource
   "Gets the HTML template resource specified by name for the given uri."
