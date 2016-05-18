@@ -1,4 +1,4 @@
-(defproject glimpse "0.1.0"
+(defproject glimpse "0.1.1"
   :description "A view composition library in Clojure supporting a view-first workflow"
   :url "https://github.com/tessellator/glimpse"
   :license {:name "Eclipse Public License"
