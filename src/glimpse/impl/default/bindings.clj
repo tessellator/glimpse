@@ -134,7 +134,7 @@
   ([nodes scope version data]
    (let [v (cond
              (nil? version) (constantly nil)
-             (fn? version) #(name (version %))
+             (fn? version) #(when-let [v (version %)] (name v))
              :else (constantly (name version)))]
     (html/transform nodes
                     (scope-selector scope)
