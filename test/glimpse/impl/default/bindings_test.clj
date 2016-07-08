@@ -132,7 +132,7 @@
             :body "My second content"
             :comment []}]
 
-                    (str "<div data-scope=\"post\">"
+          (str "<div data-scope=\"post\">"
                "<a data-prop=\"title\" href=\"post_link\">My Title</a>"
                "<p data-prop=\"body\">My content</p>"
                "<div data-scope=\"comment\">"
@@ -164,4 +164,33 @@
   (testing "that data-prototype nodes are removed on binding"
     (let [partial (eh/parse-fragment "<div data-scope=\"post\"><span data-prop=\"author\">Author</span></div><div data-scope=\"post\" data-prototype><span data-prop=\"author\">Author</span></div>")]
       (is (= "<div data-scope=\"post\"><span data-prop=\"author\">Einstein</span></div>"
-             (apply str (html/emit* (bind-scope partial :post {:author "Einstein"}))))))))
+             (render (bind-scope partial :post {:author "Einstein"})))))))
+
+(deftest test-data-version
+  (let [a (eh/parse-fragment (str "<div data-scope=\"post\">"
+                                  "<h1 data-prop=\"title\">Some Title</h1>"
+                                  "<p data-version=\"complete\" data-default data-prop=\"full-text\">Full Text</p>"
+                                  "<p data-version=\"abbreviated\">"
+                                  "<span data-prop=\"title\">Title</span> - <span data-prop=\"abstract\">Abstract</span>"
+                                  "</p>"
+                                  "</div>"))
+        complete-result "<div data-scope=\"post\"><h1 data-prop=\"title\">my_title</h1><p data-version=\"complete\" data-default=\"\" data-prop=\"full-text\">my_full_text</p></div>"
+        abbreviated-result "<div data-scope=\"post\"><h1 data-prop=\"title\">my_title</h1><p data-version=\"abbreviated\"><span data-prop=\"title\">my_title</span> - <span data-prop=\"abstract\">my_abstract</span></p></div>"
+        data {:title "my_title" :full-text "my_full_text" :abstract "my_abstract"}
+        abbreviated-data {:title "my_title" :abstract "my_abstract"}]
+    (are [expected version data] (= expected (render (bind-scope a :post version data)))
+      complete-result nil data
+      complete-result "complete" data
+      abbreviated-result "abbreviated" data
+      abbreviated-result :abbreviated data
+      abbreviated-result #(if (:full-text %) :complete :abbreviated) abbreviated-data)))
+
+(deftest test-filter-version
+  (let [basic-post "<div data-scope=\"post\"></div>"
+        long-post "<div data-scope=\"post\"><h1 data-prop=\"title\"></h1><p data-version=\"a b\" data-default=\"\"><span data-prop=\"title\"></span> - <span data-prop=\"abstract\"></span></p><p data-version=\"c\" data-prop=\"full-text\"></p></div>"
+        default-post "<div data-scope=\"post\"><h1 data-prop=\"title\"></h1><p data-version=\"a b\" data-default=\"\"><span data-prop=\"title\"></span> - <span data-prop=\"abstract\"></span></p></div>"
+        c-post "<div data-scope=\"post\"><h1 data-prop=\"title\"></h1><p data-version=\"c\" data-prop=\"full-text\"></p></div>"]
+   (are [expected input version] (= expected (render (filter-version (parse-el input) version)))
+     basic-post basic-post nil
+     default-post long-post nil
+     c-post long-post "c")))
