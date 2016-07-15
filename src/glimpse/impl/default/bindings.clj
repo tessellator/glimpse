@@ -87,9 +87,9 @@
 
 (defn version
   "Gets the version from the provided data. The version is expected to exist as
-  a value associated with ::glimpse.views/version on the data."
+  a value associated with :glimpse.views/version on the data."
   [data]
-  (let [version (::glimpse.views/version data)]
+  (let [version (:glimpse.views/version data)]
     (cond
       (fn? version) (when-let [v (version data)] (name v))
       (nil? version) nil
@@ -143,7 +143,7 @@
   be selected for those data without a corresponding version.
 
   The version information may also be embedded in the data by using the
-  ::glimpse.views/version key on the data."
+  :glimpse.views/version key on the data."
   ([nodes scope data]
    (html/transform nodes
                    (scope-selector scope)
@@ -154,5 +154,5 @@
          version (if (sequential? version)
                    (resize (count data) version)
                    (repeat version))
-         data (map #(assoc %1 ::glimpse.views/version %2) data version)]
+         data (map #(assoc %1 :glimpse.views/version %2) data version)]
      (bind-scope nodes scope data))))
