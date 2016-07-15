@@ -63,47 +63,47 @@
                                        "</div>"
                                        "</div>"))]
       (testing "with a single post"
-       (are [expected bindings] (= expected (render (bind-scope post :post bindings)))
-         (str "<div data-scope=\"post\">"
-              "<a data-prop=\"title\" href=\"post_link\">My Title</a>"
-              "<p data-prop=\"body\">My content</p>"
-              "</div>")
-         {:title {:href "post_link" :content "My Title"} :body "My content" :comment nil}
+        (are [expected bindings] (= expected (render (bind-scope post :post bindings)))
+          (str "<div data-scope=\"post\">"
+               "<a data-prop=\"title\" href=\"post_link\">My Title</a>"
+               "<p data-prop=\"body\">My content</p>"
+               "</div>")
+          {:title {:href "post_link" :content "My Title"} :body "My content" :comment nil}
 
-         (str "<div data-scope=\"post\">"
-              "<a data-prop=\"title\" href=\"post_link\">My Title</a>"
-              "<p data-prop=\"body\">My content</p>"
-              "</div>")
-         {:title {:href "post_link" :content "My Title"} :body "My content" :comment []}
+          (str "<div data-scope=\"post\">"
+               "<a data-prop=\"title\" href=\"post_link\">My Title</a>"
+               "<p data-prop=\"body\">My content</p>"
+               "</div>")
+          {:title {:href "post_link" :content "My Title"} :body "My content" :comment []}
 
-         (str "<div data-scope=\"post\">"
-              "<a data-prop=\"title\" href=\"post_link\">My Title</a>"
-              "<p data-prop=\"body\">My content</p>"
-              "<div data-scope=\"comment\">"
-              "<p>Author:<span data-prop=\"author\">President Lincoln</span></p>"
-              "<p data-prop=\"body\">Fourscore and seven years ago...</p>"
-              "</div>"
-              "</div>")
-         {:title {:href "post_link" :content "My Title"}
-          :body "My content"
-          :comment {:author "President Lincoln" :body "Fourscore and seven years ago..."}}
+          (str "<div data-scope=\"post\">"
+               "<a data-prop=\"title\" href=\"post_link\">My Title</a>"
+               "<p data-prop=\"body\">My content</p>"
+               "<div data-scope=\"comment\">"
+               "<p>Author:<span data-prop=\"author\">President Lincoln</span></p>"
+               "<p data-prop=\"body\">Fourscore and seven years ago...</p>"
+               "</div>"
+               "</div>")
+          {:title {:href "post_link" :content "My Title"}
+           :body "My content"
+           :comment {:author "President Lincoln" :body "Fourscore and seven years ago..."}}
 
-         (str "<div data-scope=\"post\">"
-              "<a data-prop=\"title\" href=\"post_link\">My Title</a>"
-              "<p data-prop=\"body\">My content</p>"
-              "<div data-scope=\"comment\">"
-              "<p>Author:<span data-prop=\"author\">President Lincoln</span></p>"
-              "<p data-prop=\"body\">Fourscore and seven years ago...</p>"
-              "</div>"
-              "<div data-scope=\"comment\">"
-              "<p>Author:<span data-prop=\"author\">President Roosevelt</span></p>"
-              "<p data-prop=\"body\">The only thing we have to fear is fear itself.</p>"
-              "</div>"
-              "</div>")
-         {:title {:href "post_link" :content "My Title"}
-          :body "My content"
-          :comment [{:author "President Lincoln" :body "Fourscore and seven years ago..."}
-                    {:author "President Roosevelt" :body "The only thing we have to fear is fear itself."}]}))
+          (str "<div data-scope=\"post\">"
+               "<a data-prop=\"title\" href=\"post_link\">My Title</a>"
+               "<p data-prop=\"body\">My content</p>"
+               "<div data-scope=\"comment\">"
+               "<p>Author:<span data-prop=\"author\">President Lincoln</span></p>"
+               "<p data-prop=\"body\">Fourscore and seven years ago...</p>"
+               "</div>"
+               "<div data-scope=\"comment\">"
+               "<p>Author:<span data-prop=\"author\">President Roosevelt</span></p>"
+               "<p data-prop=\"body\">The only thing we have to fear is fear itself.</p>"
+               "</div>"
+               "</div>")
+          {:title {:href "post_link" :content "My Title"}
+           :body "My content"
+           :comment [{:author "President Lincoln" :body "Fourscore and seven years ago..."}
+                     {:author "President Roosevelt" :body "The only thing we have to fear is fear itself."}]}))
 
       (testing "with multiple posts"
         (are [expected bindings] (= expected (render (bind-scope post :post bindings)))
@@ -125,9 +125,9 @@
                "<p data-prop=\"body\">My second content</p>"
                "</div>")
           [{:title {:href "post_link" :content "My Title"}
-             :body "My content"
-             :comment [{:author "President Lincoln" :body "Fourscore and seven years ago..."}
-                       {:author "President Roosevelt" :body "The only thing we have to fear is fear itself."}]}
+            :body "My content"
+            :comment [{:author "President Lincoln" :body "Fourscore and seven years ago..."}
+                      {:author "President Roosevelt" :body "The only thing we have to fear is fear itself."}]}
            {:title {:href "second_post_link" :content "My Second Title"}
             :body "My second content"
             :comment []}]
@@ -153,9 +153,9 @@
                "</div>"
                "</div>")
           [{:title {:href "post_link" :content "My Title"}
-             :body "My content"
-             :comment [{:author "President Lincoln" :body "Fourscore and seven years ago..."}
-                       {:author "President Roosevelt" :body "The only thing we have to fear is fear itself."}]}
+            :body "My content"
+            :comment [{:author "President Lincoln" :body "Fourscore and seven years ago..."}
+                      {:author "President Roosevelt" :body "The only thing we have to fear is fear itself."}]}
            {:title {:href "second_post_link" :content "My Second Title"}
             :body "My second content"
             :comment {:author "Albert Einstein"
@@ -178,19 +178,23 @@
         abbreviated-result "<div data-scope=\"post\"><h1 data-prop=\"title\">my_title</h1><p data-version=\"abbreviated\"><span data-prop=\"title\">my_title</span> - <span data-prop=\"abstract\">my_abstract</span></p></div>"
         data {:title "my_title" :full-text "my_full_text" :abstract "my_abstract"}
         abbreviated-data {:title "my_title" :abstract "my_abstract"}]
-    (are [expected version data] (= expected (render (bind-scope a :post version data)))
-      complete-result nil data
-      complete-result "complete" data
-      abbreviated-result "abbreviated" data
-      abbreviated-result :abbreviated data
-      abbreviated-result #(if (:full-text %) :complete :abbreviated) abbreviated-data)))
+    (testing "with single data binding"
+      (are [expected version data] (= expected (render (bind-scope a :post version data)))
+        complete-result nil data
+        complete-result "complete" data
+        abbreviated-result "abbreviated" data
+        abbreviated-result :abbreviated data
+        abbreviated-result #(if (:full-text %) :complete :abbreviated) abbreviated-data))
+    (testing "with collection data binding"
+      (is (= (str complete-result abbreviated-result)
+             (render (bind-scope a :post [:complete :abbreviated] [data data])))))))
 
 (deftest test-filter-version
   (let [basic-post "<div data-scope=\"post\"></div>"
         long-post "<div data-scope=\"post\"><h1 data-prop=\"title\"></h1><p data-version=\"a b\" data-default=\"\"><span data-prop=\"title\"></span> - <span data-prop=\"abstract\"></span></p><p data-version=\"c\" data-prop=\"full-text\"></p></div>"
         default-post "<div data-scope=\"post\"><h1 data-prop=\"title\"></h1><p data-version=\"a b\" data-default=\"\"><span data-prop=\"title\"></span> - <span data-prop=\"abstract\"></span></p></div>"
         c-post "<div data-scope=\"post\"><h1 data-prop=\"title\"></h1><p data-version=\"c\" data-prop=\"full-text\"></p></div>"]
-   (are [expected input version] (= expected (render (filter-version (parse-el input) version)))
-     basic-post basic-post nil
-     default-post long-post nil
-     c-post long-post "c")))
+    (are [expected input version] (= expected (render (filter-version (parse-el input) version)))
+      basic-post basic-post nil
+      default-post long-post nil
+      c-post long-post "c")))
