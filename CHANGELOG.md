@@ -3,11 +3,11 @@
 ## [Unreleased]
 ### Added
 - Changelog
+- Added data-version and data-default bindings
 
 ## [0.1.1] - 2016-05-18
 ### Added
 - Support for searching for index.html in folder based on URI when {URI}.html is not found
-- Travis CI badge
 
 ## 0.1.0 - 2015-11-13
 ### Added

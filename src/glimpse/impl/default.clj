@@ -67,7 +67,8 @@
 (deftype View [view]
   IView
   (bind [this scope-selector data opts]
-    (View. (bindings/bind-scope view scope-selector data)))
+    (let [{version :version} (apply hash-map opts)]
+     (View. (bindings/bind-scope view scope-selector version data))))
 
   (render [this opts]
     (apply str (html/emit* view)))
