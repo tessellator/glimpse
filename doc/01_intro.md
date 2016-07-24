@@ -46,9 +46,9 @@ To bind the data, use the [`glimpse.views/bind`](https://tessellator.github.io/g
 ```
 
 ```
-(glimpse/bind :post {:author "Abraham Lincoln"
-                     :title "The Gettysburg Address"
-		     :text "Four score and seven years ago..."})
+(glimpse.views/bind :post {:author "Abraham Lincoln"
+                           :title "The Gettysburg Address"
+                           :text "Four score and seven years ago..."})
 ```
 
 After binding occurs, the output is as follows:
@@ -61,6 +61,46 @@ After binding occurs, the output is as follows:
 </article>
 ```
 
+### Versioning Views
+
+It is also possible to declare different versions of the layout for a scope. This is achieved by using the `:data-version` and `:data-default` binding directives and specifying a version when calling `glimpse.views/bind`. The following is a simple example.
+
+```
+<div data-scope="comment">
+  <div data-version="low-vote-count" class="collapsed">
+    <h2 data-prop="title">Low Vote Title</h2>
+  </div>
+
+  <div data-default>
+    <h2 data-prop="title">Default Title</h2>
+    <p data-prop="text">Default Comment Text</p>
+  </div>
+</div>
+```
+
+```
+(glimpse.views/bind :comment [{:vote-count 5 :title "Good Title" :text "Good Text"}
+                              {:vote-count -1 :title "Bad Title" :text "Bad Text"}]
+                    :version #(when (neg? (:vote-count %)) :low-vote-count))
+```
+
+This results in the following:
+
+```
+<div data-scope="comment">
+  <div data-default>
+    <h2 data-prop="title">Good Title</h2>
+    <p data-prop="text">Good Text</p>
+  </div>
+</div>
+<div data-scope="comment">
+  <div data-version="low-vote-count" class="collapsed">
+    <h2 data-prop="title">Bad Title</h2>
+  </div>
+</div>
+```
+
+There are a few options available when specifying a version with the call to `bind`. The value may be a string or keyword specifying the name of the version to use. The default version is used when a `nil` value is provided. In the case of binding a collection of values, the version is used for every element in the collection. If a collection is provided, each value is paired with the data to be bound like a `map` operation. If the number of elements to be bound exceed those of the version collection, `nil` is used for the remaining elements. Finally, you may provide a function that accepts the data to bind and returns a string, keyword, or `nil`.
 
 ## Modes
 In order to support view-first workflows, Glimpse may be configured to run in different modes. A mode provides an execution context appropriate for a given environment. While supported modes are implementation-specified, all implementations must provide two basic modes: prototype and production.
