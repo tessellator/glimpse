@@ -1,5 +1,7 @@
 # Glimpse [![Build Status](https://travis-ci.org/tessellator/glimpse.svg?branch=master)](https://travis-ci.org/tessellator/glimpse)
 
+**This project is no longer maintained**
+
 ```
 When I was a child
 I caught a fleeting glimpse
@@ -20,7 +22,7 @@ Glimpse is a view composition library in Clojure supporting a view-first workflo
 ## Installation
 Add the following dependency to your `project.clj` file:
 
-[![Clojars Project] (http://clojars.org/glimpse/latest-version.svg)] (http://clojars.org/glimpse)
+[![Clojars Project](http://clojars.org/glimpse/latest-version.svg)](http://clojars.org/glimpse)
 
 
 ## Supported Clojure Versions
